@@ -49,8 +49,8 @@ def home(request):
                                             'create_p':create_p,
                                             'login_box' : login_box})
   
-def about(request):
-  return render_template(request, "about")
+def ajuda(request):
+  return render_template(request, "ajuda")
 
 def docs(request):
   return render_template(request, "docs")

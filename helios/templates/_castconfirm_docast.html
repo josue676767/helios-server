@@ -16,16 +16,16 @@
 <br />
 {% endif %}
 
-You are logged in as <u>{{voter.display_html_big|safe}}</u><br /><br />
+Você está conectado como <u>{{voter.display_html_big|safe}}</u><br /><br />
 
-    <button type="submit" class="button large">CAST this ballot</button>
-    <span style="font-size:0.8em;"><br />You can cast as many ballots as you want.<br />Only the last one counts.</span>
+    <button type="submit" class="button large">VOTAR nesta eleição</button>
+    <span style="font-size:0.8em;"><br />Você pode votar quantas vezes quiser.<br />Apenas o ultimo voto conta.</span>
 </form>
 
 <p>
-    <button class="button tiny" onclick="if (confirm('Are you sure you want to clear this ballot and NOT cast it?')) {document.location='{% url "election@view" election.uuid %}';}">cancel</button><br />
-    <span style="font-size:0.8em;">If you cancel now, your ballot will <em>NOT</em> be recorded.<br />
-    You can start the voting process over again, of course.</span>
+    <button class="button tiny" onclick="if (confirm('Tem certeza de que deseja limpar esta cédula e NÃO registrá-la?')) {document.location='{% url "election@view" election.uuid %}';}">cancel</button><br />
+    <span style="font-size:0.8em;">Se você cancelar agora, está cédula <em>NÃO</em> será gravada.<br />
+     Você pode recomeçar o processo de votação, é claro.</span>
 </p>
 
 <!-- for now, for CSRF protection, no auto-submit just yet (benadida) -->
@@ -34,11 +34,11 @@ You are logged in as <u>{{voter.display_html_big|safe}}</u><br /><br />
 </div>
   {% else %}
 <p style="font-size:1.4em;">
-  voting has stopped, sorry.
+  A votação foi encerrada.
 </p>
   {% endif %}
 {% else %}
 <p style="font-size:1.4em;">
-  voting has not yet begun, sorry.
+  A votação ainda não foi iniciada.
 </p>
 {% endif %}

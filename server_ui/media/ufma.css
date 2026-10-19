@@ -1,8 +1,4 @@
 
-/* =========================================
-   Tipografia institucional UFMA
-   ========================================= */
-
 @font-face {
     font-family: "Montserrat";
     src: url("/static/fonts/Montserrat-Regular.woff2") format("woff2");
@@ -51,7 +47,6 @@
     font-display: swap;
 }
 
-/* Textos de leitura prolongada */
 
 body,
 p,
@@ -65,8 +60,6 @@ td,
 th {
     font-family: "Source Sans Pro", Arial, sans-serif;
 }
-
-/* Títulos e elementos de destaque */
 
 h1,
 h2,
@@ -138,7 +131,6 @@ h3 {
     margin-bottom: 12px;
 }
 
-/* Navegação superior */
 
 .top-bar {
     background-color: var(--ufma-bordo);
@@ -188,7 +180,6 @@ h3 {
     color: var(--ufma-branco);
 }
 
-/* Links */
 
 a {
     color: var(--ufma-bordo);
@@ -200,7 +191,6 @@ a:focus {
     text-decoration: underline;
 }
 
-/* Botões */
 
 button,
 .button,
@@ -226,10 +216,6 @@ input[type="button"]:hover {
     color: var(--ufma-branco);
 }
 
-/*
-   Links que se comportam como botões:
-   preserva o aspecto de link das ações inline.
-*/
 
 button.link-button {
     background: none;
@@ -370,10 +356,7 @@ textarea:focus-visible {
     object-fit: contain;
 }
 
-/* =========================================
-   Página inicial institucional da UFMA
-   ========================================= */
-
+/*Pag inicial*/
 .ufma-home-header {
     margin: 0 0 28px;
     padding: 28px 24px;
@@ -404,8 +387,7 @@ textarea:focus-visible {
     font-size: 1.05rem;
 }
 
-/* Área de autenticação */
-
+/* autenticacao */
 #mystuff > .panel {
     border: 1px solid var(--ufma-borda);
     border-top: 4px solid var(--ufma-bordo);
@@ -420,12 +402,6 @@ textarea:focus-visible {
     font-weight: 600;
 }
 
-/* Mensagem de boas-vindas */
-
-#contentbody > .large-9.columns > p:first-child {
-    color: var(--ufma-texto);
-    line-height: 1.7;
-}
 
 /* Eleições em destaque */
 
@@ -452,15 +428,12 @@ textarea:focus-visible {
     }
 }
 
-/* Navegação institucional */
 
 .top-bar .top-bar-section ul li a {
     font-family: "Montserrat", Arial, sans-serif;
     font-weight: 600;
     letter-spacing: 0.01em;
 }
-
-/* Rodapé institucional */
 
 #footer {
     font-family: "Source Sans Pro", Arial, sans-serif;
@@ -472,18 +445,13 @@ textarea:focus-visible {
     font-weight: 600;
 }
 
-/* Botões pequenos do rodapé */
 
 #footer .button {
     border-radius: 4px;
     padding: 0.45rem 0.8rem;
 }
 
-/* =========================================
-   Ajustes de contraste na área lateral
-   ========================================= */
 
-/* Títulos das seções */
 #mystuff .panel h3,
 #mystuff .panel h4,
 #mystuff .panel h5 {
@@ -491,7 +459,7 @@ textarea:focus-visible {
     margin-bottom: 12px;
 }
 
-/* Links comuns: dourado escuro para diferenciar dos botões */
+
 #mystuff .panel a:not(.button) {
     color: #98651F;
     font-weight: 600;
@@ -504,7 +472,6 @@ textarea:focus-visible {
     text-decoration: underline;
 }
 
-/* Botões de ação: manter bordô com texto branco */
 #mystuff .panel a.button,
 #mystuff .panel button,
 #mystuff .panel input[type="submit"],
@@ -515,7 +482,7 @@ textarea:focus-visible {
     border-radius: 4px;
 }
 
-/* Hover dos botões */
+/* hoover botao*/
 #mystuff .panel a.button:hover,
 #mystuff .panel a.button:focus,
 #mystuff .panel button:hover,
@@ -525,7 +492,7 @@ textarea:focus-visible {
     color: var(--ufma-branco);
 }
 
-/* Mensagens como "none yet" */
+
 #mystuff .panel em,
 #mystuff .panel i {
     color: #666666;

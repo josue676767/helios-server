@@ -41,7 +41,7 @@
   <h1>
     <a href="/" aria-label="Página inicial do Helios Voting">
       <img
-        src="/static/ufma/horizontal.png"
+        src="/static/ufma/horizontal-B.png"
         alt="Universidade Federal do Maranhão"
         class="ufma-header-logo">
     </a>
@@ -58,27 +58,15 @@
 	<li><a href="{% url "stats@home" %}">Admin</a></li>
 	<li class="divider"></li>
 	{% endif %}
-	{% if not settings.MASTER_HELIOS %}
-	<li><a href="http://heliosvoting.org">About Helios</a></li>
+  {% if not settings.MASTER_HELIOS %}
+	<li><a href="/ajuda">Ajuda</a></li>
 	{% endif %}
+
       </ul>
       
       <ul>
+        <li class="divider"></li>
         <li><a href="/">{{settings.SITE_TITLE}}</a></li>
-	{% if settings.MASTER_HELIOS %}
-        <li class="divider"></li>
-        <li class="active"><a href="/about">Sobre</a></li>
-        <li class="divider"></li>
-        <li><a target="_new" href="https://github.com/benadida/helios-server">Code</a></li>
-        <li class="divider"></li>
-        <li><a href="/docs">Documentação</a></li>
-        <li class="divider"></li>
-        <li><a href="/faq">Perguntas Frequentes</a></li>
-        <li class="divider"></li>
-        <li><a href="/privacy">Privacidade</a></li>
-	{% endif %}
-        <li class="divider"></li>
-        <li><a href="mailto:{{settings.HELP_EMAIL_ADDRESS}}">Ajuda</a></li>
       </ul>
     </section>
   </nav>
