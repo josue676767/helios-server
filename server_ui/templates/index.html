@@ -7,8 +7,15 @@
 
 {% block content %}
 
-<div class="row"><div class="large-5 columns large-centered"><a href="/"><img border="0" src="{{ settings.MAIN_LOGO_URL }}" /></a></div></div>
-<div class="row">&nbsp;</div>
+<div class="row ufma-home-header">
+  <div class="large-12 columns">
+    <p class="ufma-home-eyebrow">UNIVERSIDADE FEDERAL DO MARANHÃO</p>
+    <h1>Sistema de Votação Eletrônica</h1>
+    <p class="ufma-home-subtitle">
+      Bem-vindo ao Sistema de Votação Online da UFMA. 
+    </p>
+  </div>
+</div>
 <div class="large-9 columns">
   {% if settings.MASTER_HELIOS %}
 <p>Helios offers <b>verifiable online elections</b>.</p>
@@ -28,12 +35,12 @@ More than <b>2,000,000 votes</b> have been cast using Helios.
 </p>
 
 {% if create_p %}
-<a class="button" href="{% url "elections@new" %}">create an election</a>
+<a class="button" href="{% url "elections@new" %}">Criar uma eleição</a>
 {% endif %}
 
   {% else %}
   <p style="font-size: 1.4em;">
-    {{settings.WELCOME_MESSAGE|safe}}
+  <!----  {{settings.WELCOME_MESSAGE|safe}}-->
   </p>
   
   {% if elections|length %}
@@ -46,7 +53,7 @@ More than <b>2,000,000 votes</b> have been cast using Helios.
     {% endfor %}
   </p>
   {% else %}
-  <h4>no featured elections at the moment</h4>
+  <h4>Nenhuma eleição em destaque no momento</h4>
   {% endif %}
 {% endif %}
   
@@ -58,7 +65,7 @@ More than <b>2,000,000 votes</b> have been cast using Helios.
 {% if user %}
 <!--<div class="row right">{{user.display_html_big|safe}}</div>-->
 {% if create_p %}
-<a class="small button" href="{% url "elections@new" %}">create election</a>
+<a class="small button" href="{% url "elections@new" %}">Criar uma eleição</a>
 <h5 class="subheader">Administration</h5>
 {% if elections_administered %}
 <ul>
@@ -75,7 +82,7 @@ More than <b>2,000,000 votes</b> have been cast using Helios.
 <div class="row"></div>
 {% endif %}
 
-<h5 class="subheader">Recent Votes</h5>
+<h5 class="subheader">Votações recentes</h5>
 {% if elections_voted %}
 <ul>
 {% for election in elections_voted %}
@@ -89,7 +96,7 @@ More than <b>2,000,000 votes</b> have been cast using Helios.
 <div class="row"></div>
 {% else %}
 {% if settings.SHOW_LOGIN_OPTIONS %}
-<h5>Log In to Start Voting</h5>
+<h5>Entre para votar</h5>
 {{login_box|safe}}
 {% else %}
 <p>

@@ -1,0 +1,3 @@
+Montserrat  - Copyright The Montserrat Project Authors (github.com/JulietaUla/Montserrat) - SIL Open Font License 1.1
+Source Sans 3 (sucessora da Source Sans Pro) - Copyright Adobe (github.com/adobe-fonts/source-sans) - SIL Open Font License 1.1
+Ambas permitem uso, redistribuição e hospedagem própria. Texto da licença: https://openfontlicense.org
