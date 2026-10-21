@@ -3132,13 +3132,14 @@ label.error {
         left: 100%;
         top: 0; }
     .top-bar-section > ul > .divider, .top-bar-section > ul > [role="separator"] {
-      border-bottom: none;
-      border-top: none;
-      border-right: solid 1px #2b2b2b;
-      border-left: solid 1px black;
-      clear: none;
-      height: 45px;
-      width: 0; }
+    border-bottom: none;
+    border-top: none;
+    border-right: solid 1px #D4B277;
+    border-left: solid 1px #D4B277;
+    clear: none;
+    height: 45px;
+    margin-top: 20px;
+    width: 0;}
     .top-bar-section .has-form {
       background: #111111;
       padding: 0 15px;
