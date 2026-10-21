@@ -1,23 +1,23 @@
 {% extends TEMPLATE_BASE %}
 
 {% block content %}
-  <h2 class="title">{{ election.name }} – Register</h2>
+  <h2 class="title">{{ election.name }} – Cadastro</h2>
 
 {% if user %}
 <p>
-    You are currently logged in as {{user.user_id}} [{{user.user_type}}]
+    Você está conectado como {{user.user_id}} [{{user.user_type}}]
 </p>
 {% if voter %}
 <p>
-    You are currently registered for this election.
+    Você já está cadastrado nesta eleição.
 </p>
 {% else %}
 <p>
-    You are <em>not</em> registered for this election.
+    Você <em>não</em> está cadastrado nesta eleição.
 </p>
 
 <form method="post" action="{% url "election@register" election.uuid %}">
-<input class="button" type="submit" value="register!" />
+<input class="button" type="submit" value="cadastrar-se!" />
 </form>
 {% endif %}
 

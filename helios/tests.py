@@ -951,9 +951,9 @@ class ElectionBlackboxTests(WebTest):
         response = self.client.get("/helios/elections/%s/voters/list" % self.election.uuid, follow=False)
         # check total count of voters
         if self.election.num_voters == 0:
-            self.assertContains(response, "no voters")
+            self.assertContains(response, "nenhum eleitor")
         else:
-            self.assertContains(response, "(of %s)" % self.election.num_voters)
+            self.assertContains(response, "(de %s)" % self.election.num_voters)
 
     def test_get_election_voters_raw(self):
         response = self.client.get("/helios/elections/%s/voters/" % self.election.uuid, follow=False)
@@ -1042,14 +1042,14 @@ class ElectionBlackboxTests(WebTest):
 
         # check that helios is indeed a trustee
         response = self.client.get("/helios/elections/%s/trustees/view" % election_id)
-        self.assertContains(response, "Trustee #1")
+        self.assertContains(response, "Curador nº 1")
 
         # add a few voters with an improperly placed email address
         FILE = "helios/fixtures/voter-badfile.csv"
         voters_file = open(FILE)
         response = self.client.post("/helios/elections/%s/voters/upload" % election_id, {'voters_file': voters_file, 'csrf_token': self.client.session['csrf_token']})
         voters_file.close()
-        self.assertContains(response, "HOLD ON")
+        self.assertContains(response, "ATENÇÃO")
 
         # add a few voters, via file upload
         # this file now includes a UTF-8 encoded unicode character
@@ -1059,7 +1059,7 @@ class ElectionBlackboxTests(WebTest):
         voters_file = open(FILE)
         response = self.client.post("/helios/elections/%s/voters/upload" % election_id, {'voters_file': voters_file, 'csrf_token': self.client.session['csrf_token']})
         voters_file.close()
-        self.assertContains(response, "first few rows of this file")
+        self.assertContains(response, "As primeiras linhas deste arquivo")
 
         # now we confirm the upload
         response = self.client.post("/helios/elections/%s/voters/upload" % election_id, {'confirm_p': "1", 'csrf_token': self.client.session['csrf_token']})
@@ -1070,7 +1070,7 @@ class ElectionBlackboxTests(WebTest):
         voters_file = open(FILE, mode='rb')
         response = self.client.post("/helios/elections/%s/voters/upload" % election_id, {'voters_file': voters_file, 'csrf_token': self.client.session['csrf_token']})
         voters_file.close()
-        self.assertContains(response, "first few rows of this file")
+        self.assertContains(response, "As primeiras linhas deste arquivo")
         
         # and we want to check that there are now voters
         response = self.client.get("/helios/elections/%s/voters/" % election_id)
@@ -1315,7 +1315,7 @@ class ElectionBlackboxTests(WebTest):
 
         self.clear_login()
         response = self.client.get("/helios/elections/%s/voters/list" % election_id)
-        self.assertContains(response, "Only the voters listed here")
+        self.assertContains(response, "Somente os eleitores listados aqui")
 
     def test_multiple_voter_uploads_with_aliases(self):
         """Test that uploading multiple voter files with aliases generates unique sequential aliases"""
@@ -1344,7 +1344,7 @@ class ElectionBlackboxTests(WebTest):
                 "/helios/elections/%s/voters/upload" % election_id,
                 {"voters_file": f, "csrf_token": self.client.session["csrf_token"]}
             )
-        self.assertContains(response, "first few rows")
+        self.assertContains(response, "primeiras linhas")
 
         # Confirm first upload
         response = self.client.post(
@@ -1365,7 +1365,7 @@ class ElectionBlackboxTests(WebTest):
                 "/helios/elections/%s/voters/upload" % election_id,
                 {"voters_file": f, "csrf_token": self.client.session["csrf_token"]}
             )
-        self.assertContains(response, "first few rows")
+        self.assertContains(response, "primeiras linhas")
 
         # Confirm second upload
         response = self.client.post(
@@ -1419,7 +1419,7 @@ class ElectionBlackboxTests(WebTest):
                 "/helios/elections/%s/voters/upload" % election_id,
                 {"voters_file": f, "csrf_token": self.client.session["csrf_token"]}
             )
-        self.assertContains(response, "first few rows")
+        self.assertContains(response, "primeiras linhas")
 
         # Confirm upload
         response = self.client.post(
@@ -1772,7 +1772,7 @@ class EmailOptOutTests(TestCase):
         body = render_template_raw(None, 'email/vote_body.txt', template_vars)
         
         # Verify the unsubscribe link is in the body
-        self.assertIn('To stop receiving all emails from Helios', body)
+        self.assertIn('Para deixar de receber todos os e-mails do Helios', body)
         self.assertIn('/optout/confirm/', body)
         self.assertIn(email, body)
         self.assertIn(unsubscribe_code, body)
@@ -1879,8 +1879,8 @@ class EmailOptOutViewTests(WebTest):
 
         response = self.client.post('/optin/', {'email': email})
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Good News!')
-        self.assertContains(response, f'The email address <strong>{email}</strong> is already receiving emails from Helios')
+        self.assertContains(response, 'Boas notícias!')
+        self.assertContains(response, f'O endereço de e-mail <strong>{email}</strong> já recebe e-mails do Helios')
 
     def test_optin_confirm_with_valid_code(self):
         """Test opt-in confirmation with valid HMAC code"""
@@ -2257,7 +2257,7 @@ class ElectionMultipleAdminsViewTests(WebTest):
         self.setup_login()
         response = self.client.get(f'/helios/elections/{self.election.uuid}/admins/')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'Administrators')
+        self.assertContains(response, 'Administradores')
         self.assertContains(response, self.admin.user_id)
 
     def test_admins_list_view_as_non_admin(self):
@@ -2278,7 +2278,7 @@ class ElectionMultipleAdminsViewTests(WebTest):
         self.setup_login()
         response = self.client.get(f'/helios/elections/{self.election.uuid}/admins/add')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'Add Administrator')
+        self.assertContains(response, 'Adicionar administrador')
         self.assertContains(response, 'name="email"')
 
     def test_add_admin_success(self):
@@ -2345,7 +2345,7 @@ class ElectionMultipleAdminsViewTests(WebTest):
             'csrf_token': self.client.session['csrf_token']
         })
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'Multiple users were found')
+        self.assertContains(response, 'Foram encontrados vários usuários')
         self.assertContains(response, 'google')
         self.assertContains(response, 'facebook')
 
@@ -2382,7 +2382,7 @@ class ElectionMultipleAdminsViewTests(WebTest):
         self.setup_login()
         response = self.client.get(f'/helios/elections/{self.election.uuid}/admins/remove?email={self.other_user.user_id}&user_type={self.other_user.user_type}')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'Remove Administrator')
+        self.assertContains(response, 'Remover administrador')
         self.assertContains(response, self.other_user.user_id)
 
     def test_remove_admin_success(self):
@@ -2420,7 +2420,7 @@ class ElectionMultipleAdminsViewTests(WebTest):
         self.election.admins.add(self.other_user)
         self.setup_login(self.other_user)
         response = self.client.get(f'/helios/elections/{self.election.uuid}/admins/')
-        self.assertContains(response, '(you)')
+        self.assertContains(response, '(você)')
         # The remove link should not appear for themselves
         self.assertNotContains(response, f'email={self.other_user.user_id}&amp;user_type={self.other_user.user_type}')
 
@@ -2597,7 +2597,7 @@ class VoterEmailCutoffViewTests(WebTest):
         self.setup_login()
         response = self.client.get(f'/helios/elections/{self.election.uuid}/voters/list')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'email voters')
+        self.assertContains(response, 'enviar e-mail aos eleitores')
         # Should have a link, not a disabled button
         self.assertContains(response, 'href')
 
@@ -2609,7 +2609,7 @@ class VoterEmailCutoffViewTests(WebTest):
         self.setup_login()
         response = self.client.get(f'/helios/elections/{self.election.uuid}/voters/list')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'email voters')
+        self.assertContains(response, 'enviar e-mail aos eleitores')
         self.assertContains(response, 'disabled')
         self.assertContains(response, '3 weeks ago')
 
@@ -2843,7 +2843,7 @@ class PasswordResendTests(WebTest):
         response = self.client.get(self.get_resend_url())
         self.assertStatusCode(response, 200)
         self.assertContains(response, 'Voter ID')
-        self.assertContains(response, 'Resend')
+        self.assertContains(response, 'Reenviar')
 
     def test_post_valid_voter_shows_success_and_sends_email(self):
         """Test that POST with valid voter ID shows success message and sends email"""
@@ -2858,7 +2858,7 @@ class PasswordResendTests(WebTest):
             'voter_id': 'testvoter'
         })
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'email with your voting credentials has been sent')
+        self.assertContains(response, 'um e-mail com suas credenciais de votação foi enviado')
 
         # Check that an email was queued
         self.assertEqual(len(mail.outbox), num_messages_before + 1)
@@ -2882,7 +2882,7 @@ class PasswordResendTests(WebTest):
         })
         self.assertStatusCode(response, 200)
         # Should still show success message to prevent enumeration attacks
-        self.assertContains(response, 'email with your voting credentials has been sent')
+        self.assertContains(response, 'um e-mail com suas credenciais de votação foi enviado')
 
         # But no email should have been sent
         self.assertEqual(len(mail.outbox), num_messages_before)
@@ -2941,7 +2941,7 @@ class PasswordResendTests(WebTest):
         })
         # Should still show success (doesn't reveal that email is missing)
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'email with your voting credentials has been sent')
+        self.assertContains(response, 'um e-mail com suas credenciais de votação foi enviado')
 
         # But no email should have been sent since voter has no email
         self.assertEqual(len(mail.outbox), num_messages_before)
@@ -3032,7 +3032,7 @@ class PendingVotesTests(TestCase):
 
         # Should show pending votes message, not redirect
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'still being processed')
+        self.assertContains(response, 'ainda em processamento')
 
         # Election should not have started tallying
         self.election.refresh_from_db()
@@ -3116,14 +3116,14 @@ class UserSearchTests(WebTest):
         self.setup_login(self.site_admin)
         response = self.client.get('/helios/stats/user-search')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'User Search')
+        self.assertContains(response, 'Busca de usuários')
 
     def test_user_search_empty_query(self):
         """Test user search with no query returns prompt"""
         self.setup_login(self.site_admin)
         response = self.client.get('/helios/stats/user-search')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'Enter a search term')
+        self.assertContains(response, 'Digite um termo de busca')
 
     def test_user_search_by_name(self):
         """Test searching for users by name"""
@@ -3146,7 +3146,7 @@ class UserSearchTests(WebTest):
         self.setup_login(self.site_admin)
         response = self.client.get('/helios/stats/user-search?q=ben@adida.net')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'Elections as Administrator')
+        self.assertContains(response, 'Eleições como administrador')
         self.assertContains(response, 'Test User Search Election 1')
         self.assertContains(response, 'Test User Search Election 2')
 
@@ -3155,7 +3155,7 @@ class UserSearchTests(WebTest):
         self.setup_login(self.site_admin)
         response = self.client.get('/helios/stats/user-search?q=ben@adida.net')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'Elections as Voter')
+        self.assertContains(response, 'Eleições como eleitor')
         self.assertContains(response, 'Test User Search Election 2')
 
     def test_user_search_shows_elections_as_trustee(self):
@@ -3163,7 +3163,7 @@ class UserSearchTests(WebTest):
         self.setup_login(self.site_admin)
         response = self.client.get('/helios/stats/user-search?q=ben@adida.net')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'Elections as Trustee')
+        self.assertContains(response, 'Eleições como curador')
         self.assertContains(response, 'Test User Search Election 1')
 
     def test_user_search_no_results(self):
@@ -3171,7 +3171,7 @@ class UserSearchTests(WebTest):
         self.setup_login(self.site_admin)
         response = self.client.get('/helios/stats/user-search?q=nonexistent@example.com')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'No users found')
+        self.assertContains(response, 'Nenhum usuário encontrado')
 
     def test_user_search_case_insensitive(self):
         """Test that user search is case insensitive"""
@@ -3185,7 +3185,7 @@ class UserSearchTests(WebTest):
         self.setup_login(self.site_admin)
         response = self.client.get('/helios/stats/user-search?q=ben@adida.net')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'User Type')
+        self.assertContains(response, 'Tipo de usuário')
         self.assertContains(response, 'google')
 
     def test_user_search_shows_admin_status(self):
@@ -3195,14 +3195,14 @@ class UserSearchTests(WebTest):
         # Search for site admin
         response = self.client.get('/helios/stats/user-search?q=mccio')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'Site Admin')
-        self.assertContains(response, 'Yes')
+        self.assertContains(response, 'Administrador do site')
+        self.assertContains(response, 'Sim')
 
         # Search for regular user
         response = self.client.get('/helios/stats/user-search?q=ben@adida.net')
         self.assertStatusCode(response, 200)
-        self.assertContains(response, 'Site Admin')
-        self.assertContains(response, 'No')
+        self.assertContains(response, 'Administrador do site')
+        self.assertContains(response, 'Não')
 
 
 class VoterUploadRestrictionTests(WebTest):

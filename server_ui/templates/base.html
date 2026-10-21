@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!--[if IE 8]> 				 <html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<!--[if IE 8]> 				 <html class="no-js lt-ie9" lang="pt-BR" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="pt-BR" > <!--<![endif]-->
 
 <head>
   <meta charset="utf-8">
@@ -92,12 +92,12 @@
     <a class="tiny button" href="{% url "auth@logout" %}?return_url={{CURRENT_URL}}">Sair</a><br />
     {% else %}
     {% if voter %}
-    Você está conectado como eleitor <u>{% if voter.alias %}{{voter.alias}}{% else %}{{voter.name}}{% endif %}</u> in election <u>{{voter.election.name}}</u>. [<a href="{{settings.SECURE_URL_HOST}}{% url "auth@logout" %}?return_url={{CURRENT_URL}}">sign out</a>]
+    Você está conectado como eleitor <u>{% if voter.alias %}{{voter.alias}}{% else %}{{voter.name}}{% endif %}</u> na eleição <u>{{voter.election.name}}</u>. [<a href="{{settings.SECURE_URL_HOST}}{% url "auth@logout" %}?return_url={{CURRENT_URL}}">sair</a>]
     {% else %}
 {% if settings.SHOW_LOGIN_OPTIONS %}
-    Você não está conectado. <a class="tiny button" href="{{settings.SECURE_URL_HOST}}{% url "auth@index" %}?return_url={{CURRENT_URL}}">log in</a>
+    Você não está conectado. <a class="tiny button" href="{{settings.SECURE_URL_HOST}}{% url "auth@index" %}?return_url={{CURRENT_URL}}">Entrar</a>
 {% else %}
-powered by <a href="http://heliosvoting.org">Helios Voting</a>.
+Desenvolvido com <a href="http://heliosvoting.org">Helios Voting</a>.
 {% endif %}
     {% endif %}
     {% endif %}

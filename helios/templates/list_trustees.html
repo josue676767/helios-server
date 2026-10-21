@@ -1,33 +1,33 @@
 {% extends "helios/templates/cryptobase.html" %}
 
-{% block title %}Trustees for {{election.name}}{% endblock %}
+{% block title %}Curadores de {{election.name}}{% endblock %}
 
 {% block content %}
-  <h3 class="title">{{election.name}} &mdash; Trustees <span style="font-size:0.7em;">[<a href="{% url "election@view" election.uuid %}">back to election</a>]</span></h3>
+  <h3 class="title">{{election.name}} &mdash; Curadores <span style="font-size:0.7em;">[<a href="{% url "election@view" election.uuid %}">voltar à eleição</a>]</span></h3>
 
 <p>
-    Trustees are responsible for decrypting the election result.<br />
-    Each trustee generates a keypair and submits the public portion to Helios.<br />
-    When it's time to decrypt, each trustee needs to provide their secret key.
+    Os curadores são responsáveis por descriptografar o resultado da eleição.<br />
+    Cada curador gera um par de chaves e envia a parte pública ao Helios.<br />
+    Na hora de descriptografar, cada curador precisa fornecer sua chave secreta.
 </p>
 
 {% if not election.frozen_at %}
 
 <p>
-  Helios is automatically your first trustee and will handle its keypair generation and decryption automatically.<br />
-  You may add additional trustees if you want, and you can even remove the Helios trustee.<br />
-  However, we recommend you do this only if you have a solid understanding of the trustee's role.
+  O Helios é automaticamente o seu primeiro curador e cuidará automaticamente da geração do seu par de chaves e da descriptografia.<br />
+  Você pode adicionar outros curadores, se desejar, e até remover o curador Helios.<br />
+  No entanto, recomendamos fazer isso somente se você compreender bem o papel do curador.
 </p>
 
 {% if admin_p %}
 <p>
-    [ <a onclick="return(confirm('Adding your own trustee requires a good bit more work to tally the election.\nYou will need to have trustees generate keypairs and safeguard their secret key.\n\nIf you are not sure what that means, we strongly recommend\nclicking Cancel and letting Helios tally the election for you.'));" href="{% url "election@trustees@new" election.uuid %}">add a trustee</a> ]
+    [ <a onclick="return(confirm('Adicionar seu próprio curador exige bem mais trabalho para realizar a apuração da eleição.\nSerá necessário que os curadores gerem pares de chaves e protejam sua chave secreta.\n\nSe você não tem certeza do que isso significa, recomendamos fortemente\nclicar em Cancelar e deixar que o Helios realize a apuração da eleição para você.'));" href="{% url "election@trustees@new" election.uuid %}">adicionar um curador</a> ]
 </p>
 {% if not election.has_helios_trustee %}
 <div style="margin: 1em 0;">
     <form class="inline-action" method="post" action="{% url "election@trustees@add-helios" election.uuid %}">
     <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
-    <button type="submit" class="link-button">add Helios as a trustee</button>
+    <button type="submit" class="link-button">adicionar o Helios como curador</button>
     </form>
 </div>
 {% endif %}
@@ -42,31 +42,31 @@
 <!-- the action forms sit alongside the heading rather than inside it: a <form> is flow
      content, which an <h5> is not allowed to contain. -->
 <div class="trustee-heading">
-<h5>Trustee #{{forloop.counter}}: {{t.name}}</h5>
+<h5>Curador nº {{forloop.counter}}: {{t.name}}</h5>
 {% if admin_p %}
 {% if t.secret_key %}
-{% if not election.frozen_at %}[<form class="inline-action" method="post" action="{% url "election@trustees@delete" election.uuid %}" onsubmit="return confirm('Are you sure you want to remove Helios as a trustee?');"><input type="hidden" name="csrf_token" value="{{csrf_token}}" /><input type="hidden" name="uuid" value="{{t.uuid}}" /><button type="submit" class="link-button">x</button></form>]{% endif %}
+{% if not election.frozen_at %}[<form class="inline-action" method="post" action="{% url "election@trustees@delete" election.uuid %}" onsubmit="return confirm('Tem certeza de que deseja remover o Helios como curador?');"><input type="hidden" name="csrf_token" value="{{csrf_token}}" /><input type="hidden" name="uuid" value="{{t.uuid}}" /><button type="submit" class="link-button">x</button></form>]{% endif %}
 {% else %}
 ({{t.email}})
-{% if not election.frozen_at %}[<form class="inline-action" method="post" action="{% url "election@trustees@delete" election.uuid %}" onsubmit="return confirm('Are you sure you want to remove this Trustee?');"><input type="hidden" name="csrf_token" value="{{csrf_token}}" /><input type="hidden" name="uuid" value="{{t.uuid}}" /><button type="submit" class="link-button">x</button></form>]{% endif %}
-[<form class="inline-action" method="post" action="{% url "election@trustee@send-url" election.uuid t.uuid %}" onsubmit="return confirm('Are you sure you want to send this trustee his/her admin URL?');"><input type="hidden" name="csrf_token" value="{{csrf_token}}" /><button type="submit" class="link-button">send login</button></form>]
+{% if not election.frozen_at %}[<form class="inline-action" method="post" action="{% url "election@trustees@delete" election.uuid %}" onsubmit="return confirm('Tem certeza de que deseja remover este curador?');"><input type="hidden" name="csrf_token" value="{{csrf_token}}" /><input type="hidden" name="uuid" value="{{t.uuid}}" /><button type="submit" class="link-button">x</button></form>]{% endif %}
+[<form class="inline-action" method="post" action="{% url "election@trustee@send-url" election.uuid t.uuid %}" onsubmit="return confirm('Tem certeza de que deseja enviar a este curador o seu URL de administração?');"><input type="hidden" name="csrf_token" value="{{csrf_token}}" /><button type="submit" class="link-button">enviar login</button></form>]
 {% endif %}
 {% endif %}
 </div>
 
 <p>
 {% if t.public_key_hash %}
-  Public Key Fingerprint: <tt style="font-size:1.5em;">{{t.public_key_hash}}</tt>
+  Impressão digital da chave pública: <tt style="font-size:1.5em;">{{t.public_key_hash}}</tt>
 {% else %}
-No public key uploaded yet.
+Nenhuma chave pública enviada ainda.
 {% endif %}
 </p>
 
 {% if election.encrypted_tally %}
 {% if t.decryption_factors %}
-<b>tally recorded for this trustee.</b>
+<b>apuração registrada para este curador.</b>
 {% else %}
-<em>waiting for this trustee's tally</em>
+<em>aguardando a apuração deste curador</em>
 {% endif %}
 {% endif %}
 </li>

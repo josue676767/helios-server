@@ -1,14 +1,14 @@
 {% extends TEMPLATE_BASE %}
 
 {% block content %}
-  <h2 class="title">{{election.name}} &mdash; Bulk Upload Voters &mdash; Confirm<span style="font-size:0.7em;">[<a href="{% url "election@view" election.uuid %}">back to election</a>]</span></h2>
+  <h2 class="title">{{election.name}} &mdash; Envio de eleitores em lote &mdash; Confirmar<span style="font-size:0.7em;">[<a href="{% url "election@view" election.uuid %}">voltar à eleição</a>]</span></h2>
 
 <p>
-You have uploaded a file of voters. The first few rows of this file are:
+Você enviou um arquivo de eleitores. As primeiras linhas deste arquivo são:
 </p>
 
 <table>
-<tr><th>Voter Type</th><th>Voter Login</th><th>Email Address</th><th>Name</th></tr>
+<tr><th>Tipo de eleitor</th><th>Login do eleitor</th><th>Endereço de e-mail</th><th>Nome</th></tr>
 {% for v in voters %}
 <tr><td>{{v.voter_type}}</td><td>{{v.voter_id}}</td><td>{{v.email}}</td><td>{{v.name}}</td></tr>
 {% endfor %}
@@ -16,7 +16,7 @@ You have uploaded a file of voters. The first few rows of this file are:
 
 {% if problems %}
 <p style="font-size: 1.5em;">
-HOLD ON:<br />
+ATENÇÃO:<br />
 {% for problem in problems %}
 - {{problem}}<br />
 {% endfor %}
@@ -25,21 +25,21 @@ HOLD ON:<br />
 
 <form class="inline-action" method="post" action="{% url "election@voters@upload-cancel" election.uuid %}">
 <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
-<button type="submit" class="link-button">never mind, upload a different file</button>
+<button type="submit" class="link-button">cancelar e enviar outro arquivo</button>
 </form>
 
 {% else %}
 <p></p>
 <form method="post" action="" id="upload_form">
-  Does this look right to you?
+  Estas informações estão corretas?
   <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
   <input type="hidden" name="confirm_p" value="1" />
-  <input class="button" type="submit" value="Yes, let's go" />
+  <input class="button" type="submit" value="Sim, continuar" />
 </form>
 
 <form class="inline-action" method="post" action="{% url "election@voters@upload-cancel" election.uuid %}">
 <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
-<button type="submit" class="link-button">no, let me upload a different file</button>
+<button type="submit" class="link-button">não, quero enviar outro arquivo</button>
 </form>
 
 {% endif %}

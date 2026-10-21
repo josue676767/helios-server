@@ -99,80 +99,80 @@ function show_pk() {
 
 </script>
 
-<h2 class="title">{{election.name}} &mdash; Trustee {{trustee.name}} &mdash; Key Setup</h2>
+<h2 class="title">{{election.name}} &mdash; Curador {{trustee.name}} &mdash; Configuração de chaves</h2>
 
 <p>
-  As a trustee, it's time to set up your key for this election.
+  Como curador, é hora de configurar a sua chave para esta eleição.
 </p>
 
 <p id="waiting_message">
-  Please wait for the generator to load...
+  Aguarde o carregamento do gerador...
 </p>
 
 <p id="generator">
 
-<span id="buttons"><button class="button" onclick="generate_keypair(); return false;" id="generate_button">Generate Election Keys</button></span>
+<span id="buttons"><button class="button" onclick="generate_keypair(); return false;" id="generate_button">Gerar chaves da eleição</button></span>
 
 <br />
-If you've already generated a keypair, you can <a href="javascript:show_key_reuse()">reuse it</a>.
+Se você já gerou um par de chaves, pode <a href="javascript:show_key_reuse()">reutilizá-lo</a>.
 </p>
 
 <div id="reuse">
-<h3>Reusing a Key</h3>
+<h3>Reutilizando uma chave</h3>
 
 <p>
-Enter your complete secret key below:
+Informe sua chave secreta completa abaixo:
 </p>
 <form onsubmit="reuse_key(this.secret_key.value); return false;">
 <textarea cols="80" rows="5" wrap="soft" name="secret_key">
 </textarea>
 <br />
-<input class="button" type="submit" value="reuse" />
+<input class="button" type="submit" value="reutilizar" />
 </form>
 </div>
 
 <div id="sk_download">
-<h3>Your Secret Key</h3>
+<h3>Sua chave secreta</h3>
 <span id="clear_button">
-Your key has been generated, but you may choose to<br /><a href="javascript:clear_keys();">clear it from memory and start from scratch</a> if you prefer.<br />
+Sua chave foi gerada, mas, se preferir, você pode<br /><a href="javascript:clear_keys();">apagá-la da memória e começar do zero</a>.<br />
 </span>
 
 <p>
-    <button class="button large" onclick="download_sk(); $('#pk_link').show();">Show my secret key</button>
+    <button class="button large" onclick="download_sk(); $('#pk_link').show();">Mostrar minha chave secreta</button>
 </p>
 </div>
 
 <div style="display:none;" id="pk_content">
-    <p>Bellow is your trustee secret key content. Please copy its content and save it securely. <br>
-       You can also click to dowload it to a file.
-       And please don't lose it! Otherwise it will not be possible to decrypt the election tally.<br>
+    <p>Abaixo está o conteúdo da sua chave secreta de curador. Copie-o e guarde-o em local seguro. <br>
+       Você também pode clicar para baixá-lo em um arquivo.
+       E não o perca! Caso contrário, não será possível descriptografar a apuração da eleição.<br>
     </p>
     <textarea id="sk_content" rows="5" wrap="soft" cols="50" style="height: 25em;"></textarea>
 </div>
 
 <div style="display:none;" id="pk_link">
 <p>
-<a id="download_to_file" href="javascript:download_sk_to_file('trustee_key_for_{{election.name}}.txt');">download private key to a file</a>
+<a id="download_to_file" href="javascript:download_sk_to_file('trustee_key_for_{{election.name}}.txt');">baixar chave privada em um arquivo</a>
 </p>
 <p>
-  <a href="javascript:show_pk();">ok, I've saved the key, let's move on</a>
+  <a href="javascript:show_pk();">ok, já salvei a chave, vamos continuar</a>
 </p>
 </div>
 
 <form method="post" id="pk_form" action="{% url "election@trustee@upload-pk" election.uuid trustee.uuid %}">
 <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
-<h3>Your Public Key</h3>
+<h3>Sua chave pública</h3>
 <p>
-    It's time to upload the public key to the server.
+    É hora de enviar a chave pública ao servidor.
 </p>
 <p>
-    The fingerprint of your public key is: <tt id="pk_hash" style="font-size: 1.5em; font-weight: bold;"></tt>.<br />
-    You may want to save this to confirm that your public key was properly stored by the server.<br />
-    (Your public key is not currently being displayed because you do not need to save it, the fingerprint is sufficient.)
+    A impressão digital da sua chave pública é: <tt id="pk_hash" style="font-size: 1.5em; font-weight: bold;"></tt>.<br />
+    Recomenda-se guardá-la para confirmar que sua chave pública foi armazenada corretamente pelo servidor.<br />
+    (Sua chave pública não está sendo exibida porque você não precisa guardá-la; a impressão digital é suficiente.)
 </p>
 <textarea id="pk_textarea" name="public_key_json" cols="80" rows="10" style="display:none;">
 </textarea>
-<input class="button" type="submit" value="Upload your public key">
+<input class="button" type="submit" value="Enviar sua chave pública">
 </form>
 
 <div id="applet_div"></div>

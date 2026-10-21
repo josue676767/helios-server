@@ -20,9 +20,13 @@ def get_election():
   return None
   
 def home(request):
-  # load the featured elections
-  featured_elections = Election.get_featured()
-  
+  # elections open for voting right now are always highlighted
+  current_elections = Election.get_current()
+
+  # elections marked as featured, minus the ones already shown above
+  current_ids = set(e.id for e in current_elections)
+  featured_elections = [e for e in Election.get_featured() if e.id not in current_ids]
+
   user = get_user(request)
   create_p = can_create_election(request)
 
@@ -43,7 +47,8 @@ def home(request):
 
   login_box = auth_views.login_box_raw(request, return_url="/", auth_systems=auth_systems)
 
-  return render_template(request, "index", {'elections': featured_elections,
+  return render_template(request, "index", {'current_elections': current_elections,
+                                            'elections': featured_elections,
                                             'elections_administered' : elections_administered,
                                             'elections_voted' : elections_voted,
                                             'create_p':create_p,

@@ -1,24 +1,24 @@
-Dear {{voter.name}},
+Prezado(a) {{voter.name}},
 
-The tally for {{election.name}} has been computed and released:
+A apuração da eleição {{election.name}} foi concluída e divulgada:
 
   {{election_url}}
 
 {{custom_message|safe}}
 
-{% if voter.vote_hash %}Your ballot tracker in this election was:
+{% if voter.vote_hash %}O código de acompanhamento da sua cédula nesta eleição era:
 
   {{voter.vote_hash}}
 
-If you believe this tracker to be in error, please contact us.
+Se você acredita que este código está incorreto, entre em contato conosco.
 {% else %}
-It appears you did not cast a vote in this election.
-Please contact us if you believe you did.
+Parece que você não registrou voto nesta eleição.
+Entre em contato conosco se você acredita que registrou.
 {% endif %}
 --
 Helios
 
 {% if unsubscribe_url %}
-To stop receiving all emails from Helios, click here:
+Para deixar de receber todos os e-mails do Helios, clique aqui:
 {{ unsubscribe_url }}
 {% endif %}

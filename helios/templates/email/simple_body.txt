@@ -1,22 +1,22 @@
-Dear {{voter.name}},
+Prezado(a) {{voter.name}},
 
 {{custom_message|safe}}
 
 ========
-How to Vote
+Como votar
 
-Election URL:  {{election_vote_url}}
+Endereço da eleição:  {{election_vote_url}}
 {% if voter.voter_type == "password" %}
-Your voter ID: {{voter.voter_login_id}}
-Your password: {{voter.voter_password}}
+Seu ID de eleitor: {{voter.voter_login_id}}
+Sua senha: {{voter.voter_password}}
 {% else %}
-Log in with your {{voter.voter_type}} account.
+Entre com a sua conta {{voter.voter_type}}.
 {% endif %}
 
 --
 Helios
 
 {% if unsubscribe_url %}
-To stop receiving all emails from Helios, click here:
+Para deixar de receber todos os e-mails do Helios, clique aqui:
 {{ unsubscribe_url }}
 {% endif %}

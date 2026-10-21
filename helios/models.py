@@ -243,6 +243,20 @@ class Election(HeliosModel):
     return cls.objects.filter(featured_p = True).order_by('short_name')
 
   @classmethod
+  def get_current(cls):
+    """
+    public elections that are open for voting right now: frozen, not archived,
+    voting already started and not yet stopped. Used for the front page, so that
+    ongoing elections show up without anyone having to mark them as featured.
+    The ones ending first come first.
+    """
+    candidates = (cls.objects
+                  .filter(private_p=False, archived_at=None, frozen_at__isnull=False)
+                  .select_related('admin')
+                  .order_by('voting_ends_at', 'name'))
+    return [e for e in candidates if e.voting_has_started() and not e.voting_has_stopped()]
+
+  @classmethod
   def get_or_create(cls, **kwargs):
     return cls.objects.get_or_create(short_name = kwargs['short_name'], defaults=kwargs)
 

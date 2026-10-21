@@ -1,8 +1,8 @@
 {% extends "helios/templates/cryptobase.html" %}
 
-{% block title %}Questions for {{election.name}}{% endblock %}
+{% block title %}Perguntas de {{election.name}}{% endblock %}
 {% block content %}
-  <h3 class="title">{{election.name}} &mdash; Questions <span style="font-size:0.7em;">[<a href="{% url "election@view" election.uuid %}">back to election</a>]</span></h3>
+  <h3 class="title">{{election.name}} &mdash; Perguntas <span style="font-size:0.7em;">[<a href="{% url "election@view" election.uuid %}">voltar à eleição</a>]</span></h3>
 
   <script language="javascript">
 {% if election.questions %}
@@ -33,15 +33,15 @@
     answer_url = answer_url || '';
     
     var required_attr = answer_num === 1 ? 'required' : '';
-    var placeholder = answer_num === 1 ? 'Enter answer option' : 'Enter answer option (optional)';
+    var placeholder = answer_num === 1 ? 'Digite a opção de resposta' : 'Digite a opção de resposta (opcional)';
     var escaped_answer = escapeAttr(answer_text);
     var escaped_url = escapeAttr(answer_url);
     var has_url = answer_url.length > 0;
     var url_display = has_url ? 'flex' : 'none';
-    var toggle_text = has_url ? '- Hide link' : '+ Add link';
+    var toggle_text = has_url ? '- Ocultar link' : '+ Adicionar link';
     
     return '<div class="answer-row">' +
-      '<div class="answer-number">Answer #' + answer_num + 
+      '<div class="answer-number">Resposta nº ' + answer_num + 
         '<span class="url-toggle" onclick="toggle_url(this, ' + answer_num + ')">' +
           '<span>' + toggle_text + '</span>' +
         '</span>' +
@@ -64,7 +64,7 @@
   function save_questions(callback) {
       $.post('./save_questions', {'questions_json' : $.toJSON(QUESTIONS), 'csrf_token': CSRF_TOKEN}, function(result) {
           if (result == "FAILURE") {
-            alert("The questions could not be saved. Please check that the URLs you entered are either http:// or https://");
+            alert("Não foi possível salvar as perguntas. Verifique se os URLs informados começam com http:// ou https://");
           } else {
             callback();
           }
@@ -100,7 +100,7 @@
       // Check for gaps in answers (empty answers before the last valid one)
       for (var k = 0; k <= last_valid_index; k++) {
           if (all_answers[k] === '') {
-              alert('Please fill in all answer fields up to answer #' + (last_valid_index + 1) + '. You cannot skip answer #' + (k + 1) + '.');
+              alert('Preencha todos os campos de resposta até a resposta nº ' + (last_valid_index + 1) + '. Não é possível pular a resposta nº ' + (k + 1) + '.');
               return null;
           }
       }
@@ -112,7 +112,7 @@
       }
       
       if (new_q.answers.length == 0) {
-        alert('Please enter at least one answer option.');
+        alert('Informe pelo menos uma opção de resposta.');
         return null;
       }
       
@@ -187,10 +187,10 @@
     var wrapper = $('#url_wrapper_' + num);
     if (wrapper.is(':visible')) {
       wrapper.hide();
-      $(element).find('span').text('+ Add link');
+      $(element).find('span').text('+ Adicionar link');
     } else {
       wrapper.show();
-      $(element).find('span').text('- Hide link');
+      $(element).find('span').text('- Ocultar link');
     }
   }
 

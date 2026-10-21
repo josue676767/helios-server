@@ -1,39 +1,39 @@
-Dear {{voter.name}},
+Prezado(a) {{voter.name}},
 
 {{custom_message|safe}}
 
-Election URL (click to begin voting):
+Endereço da eleição (clique para começar a votar):
 {{election_vote_url}}
 
 {% if voter.voter_type == "password" %}
-Your voter ID: {{voter.voter_login_id}}
-Your password: {{voter.voter_password}}
+Seu ID de eleitor: {{voter.voter_login_id}}
+Sua senha: {{voter.voter_password}}
 {% else %}
-Log in with your {{voter.voter_type}} account.
+Entre com a sua conta {{voter.voter_type}}.
 {% endif %}{% if voter.vote_hash %}
-We have recorded your vote with ballot tracker:
+Registramos o seu voto com o seguinte código de acompanhamento da cédula:
 
   {{voter.vote_hash}}
 
-You may re-vote if you wish: only your last vote counts.
+Você pode votar novamente, se desejar: apenas o seu último voto é contabilizado.
 {% endif %}{% if election.use_voter_aliases %}
-In order to protect your privacy, this election is configured
-to never display your voter login ID, name, or email address to the public.
-Instead, the ballot tracking center will only display your alias.
+Para proteger a sua privacidade, esta eleição está configurada
+para nunca exibir publicamente o seu ID de eleitor, nome ou e-mail.
+Em vez disso, o centro de acompanhamento de cédulas exibirá apenas o seu apelido.
 
-Your voter alias is {{voter.alias}}.
+Seu apelido de eleitor é {{voter.alias}}.
 
-IMPORTANTLY, when you are prompted to log in to vote,
-please use your *voter ID*, not your alias.
+IMPORTANTE: quando for solicitado que você entre para votar,
+use o seu *ID de eleitor*, e não o apelido.
 {% endif %}
 
-You may wish to verify the election fingerprint at the bottom of
-the screen when you vote:  {{voter.election.hash}}
+Se desejar, confira a impressão digital da eleição exibida no rodapé
+da tela quando você votar:  {{voter.election.hash}}
 
 --
 Helios
 
 {% if unsubscribe_url %}
-To stop receiving all emails from Helios, click here:
+Para deixar de receber todos os e-mails do Helios, clique aqui:
 {{ unsubscribe_url }}
 {% endif %}
