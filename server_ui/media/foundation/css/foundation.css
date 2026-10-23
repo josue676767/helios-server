@@ -100,7 +100,7 @@ select {
   margin-top: 0;
   margin-bottom: 0;
   max-width: 62.5em;
-  *zoom: 1; }
+  zoom: 1; }
   .row:before, .row:after {
     content: " ";
     display: table; }
@@ -122,7 +122,7 @@ select {
     margin-top: 0;
     margin-bottom: 0;
     max-width: none;
-    *zoom: 1; }
+    zoom: 1; }
     .row .row:before, .row .row:after {
       content: " ";
       display: table; }
@@ -132,7 +132,7 @@ select {
       width: auto;
       margin: 0;
       max-width: none;
-      *zoom: 1; }
+      zoom: 1; }
       .row .row.collapse:before, .row .row.collapse:after {
         content: " ";
         display: table; }
@@ -772,7 +772,7 @@ th.hide-for-touch {
     display: block;
     padding: 0;
     margin: 0 -0.625em;
-    *zoom: 1; }
+    zoom: 1; }
     [class*="block-grid-"]:before, [class*="block-grid-"]:after {
       content: " ";
       display: table; }
@@ -1851,7 +1851,7 @@ label.error {
 .button-group {
   list-style: none;
   margin: 0;
-  *zoom: 1; }
+  zoom: 1; }
   .button-group:before, .button-group:after {
     content: " ";
     display: table; }
@@ -1920,7 +1920,7 @@ label.error {
       width: 100%; }
 
 .button-bar {
-  *zoom: 1; }
+  zoom: 1; }
   .button-bar:before, .button-bar:after {
     content: " ";
     display: table; }
@@ -3039,7 +3039,7 @@ label.error {
 @media only screen and (min-width: 940px) {
   .top-bar {
     background: #111111;
-    *zoom: 1;
+    zoom: 1;
     overflow: visible; }
     .top-bar:before, .top-bar:after {
       content: " ";
@@ -3612,7 +3612,7 @@ label.error {
       right: auto; } }
 /* Clearing Styles */
 [data-clearing] {
-  *zoom: 1;
+  zoom: 1;
   margin-bottom: 0;
   margin-left: 0;
   list-style: none; }
