@@ -9,12 +9,12 @@ urlpatterns = [
     path('helios/', include('helios.urls')),
 
     # SHOULD BE REPLACED BY APACHE STATIC PATH
-    re_path(r'booth/(?P<path>.*)$', serve, {'document_root' : settings.ROOT_PATH + '/heliosbooth'}),
-    re_path(r'verifier/(?P<path>.*)$', serve, {'document_root' : settings.ROOT_PATH + '/heliosverifier'}),
+    re_path(r'booth/(?P<path>.*)$', serve, {'document_root' : settings.FRONTEND_DIR + '/heliosbooth'}),
+    re_path(r'verifier/(?P<path>.*)$', serve, {'document_root' : settings.FRONTEND_DIR + '/heliosverifier'}),
 
-    re_path(r'static/auth/(?P<path>.*)$', serve, {'document_root' : settings.ROOT_PATH + '/helios_auth/media'}),
-    re_path(r'static/helios/(?P<path>.*)$', serve, {'document_root' : settings.ROOT_PATH + '/helios/media'}),
-    re_path(r'static/(?P<path>.*)$', serve, {'document_root' : settings.ROOT_PATH + '/server_ui/media'}),
+    re_path(r'static/auth/(?P<path>.*)$', serve, {'document_root' : settings.FRONTEND_DIR + '/helios_auth/media'}),
+    re_path(r'static/helios/(?P<path>.*)$', serve, {'document_root' : settings.FRONTEND_DIR + '/helios/media'}),
+    re_path(r'static/(?P<path>.*)$', serve, {'document_root' : settings.FRONTEND_DIR + '/server_ui/media'}),
 
     # Email opt-out/opt-in URLs
     path('optout/', include([

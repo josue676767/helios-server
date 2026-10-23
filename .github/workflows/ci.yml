@@ -58,4 +58,5 @@ jobs:
           uv pip freeze
 
       - name: Run tests
+        working-directory: backend
         run: uv run python -Wall manage.py test -v 2 --settings=settings_ci

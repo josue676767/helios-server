@@ -178,18 +178,29 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'urls'
 
-ROOT_PATH = os.path.dirname(__file__)
+# Project layout:
+#   backend/   Python code (Django apps, settings, urls, manage.py)
+#   frontend/  everything the browser receives: templates, CSS/JS/images,
+#              the voting booth and the ballot verifier
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_PATH = os.path.dirname(BACKEND_DIR)  # project root, parent of backend/ and frontend/
+FRONTEND_DIR = os.path.join(ROOT_PATH, 'frontend')
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'APP_DIRS': True,
+        # templates no longer live inside the Python apps, so APP_DIRS is off and
+        # every search directory is listed explicitly.
+        'APP_DIRS': False,
         'DIRS': [
-            ROOT_PATH,
-            os.path.join(ROOT_PATH, 'templates'),
-            # os.path.join(ROOT_PATH, 'helios/templates'),  # covered by APP_DIRS:True
-            # os.path.join(ROOT_PATH, 'helios_auth/templates'),  # covered by APP_DIRS:True
-            # os.path.join(ROOT_PATH, 'server_ui/templates'),  # covered by APP_DIRS:True
+            # lets templates be addressed by full path, e.g. 'helios/templates/index.html'
+            FRONTEND_DIR,
+            os.path.join(FRONTEND_DIR, 'templates'),
+            # short names ('base.html', 'email/vote_body.txt'), searched in the same
+            # order as the apps in INSTALLED_APPS (this is what APP_DIRS used to do)
+            os.path.join(FRONTEND_DIR, 'helios_auth', 'templates'),
+            os.path.join(FRONTEND_DIR, 'helios', 'templates'),
+            os.path.join(FRONTEND_DIR, 'server_ui', 'templates'),
         ],
         'OPTIONS': {
             'debug': DEBUG

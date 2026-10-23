@@ -22,8 +22,11 @@ Helios is an end-to-end verifiable voting system that provides secure, transpare
 ## Common Commands
 
 ```bash
-# Install dependencies
+# Install dependencies (from the project root)
 uv sync
+
+# All Django commands below run from the backend/ directory
+cd backend
 
 # Run development server
 uv run python manage.py runserver
@@ -51,11 +54,24 @@ uv run celery --app helios worker --events --beat --concurrency 1
 
 ## Project Structure
 
+The project is split in two top-level folders:
+
+- `backend/` - all Python code: `manage.py`, `settings.py`, `urls.py`, `wsgi.py` and the Django apps
+- `frontend/` - everything the browser receives: HTML templates, CSS/JS/images, the voting booth and the verifier
+
+Backend apps (`backend/`):
+
 - `helios/` - Core election system (models, views, crypto, forms)
 - `helios_auth/` - Authentication system with multiple backends
 - `server_ui/` - Admin web interface
-- `heliosbooth/` - JavaScript voting booth interface
-- `heliosverifier/` - JavaScript ballot verification interface
+
+Frontend (`frontend/`):
+
+- `frontend/<app>/templates/` - HTML templates of `helios`, `helios_auth` and `server_ui` (template names are unchanged, e.g. `helios/templates/index.html`)
+- `frontend/<app>/media/` - static files, served under `/static/` (`/static/helios/`, `/static/auth/`)
+- `frontend/templates/` - global `404.html` / `500.html`
+- `frontend/heliosbooth/` - JavaScript voting booth interface (served at `/booth/`)
+- `frontend/heliosverifier/` - JavaScript ballot verification interface (served at `/verifier/`)
 
 ## Code Style Conventions
 
@@ -154,5 +170,5 @@ Key environment variables: `DEBUG`, `SECRET_KEY`, `DATABASE_URL`, `CELERY_BROKER
 ## Testing
 
 - Tests use Django's TestCase with django-webtest
-- Fixtures are in `helios/fixtures/`
+- Fixtures are in `backend/helios/fixtures/`
 - Test classes: `ElectionModelTests`, `VoterModelTests`, `ElectionBlackboxTests`, etc.

@@ -12,6 +12,8 @@
 
 * `cd` into the helios-server directory
 
+The code is split in `backend/` (Python/Django) and `frontend/` (templates and static files). Install dependencies from the project root; run every Django command from `backend/`.
+
 ## Python Setup
 
 * Install Python 3.13 including dev packages
@@ -43,6 +45,7 @@ uv sync
 * Reset database
 
 ```
+cd backend
 ./reset.sh
 ```
 
@@ -51,7 +54,15 @@ uv sync
 * Start server
 
 ```
+cd backend
 uv run python manage.py runserver
+```
+
+* In another terminal, start the background worker (needed to process voter CSV files and tallies; alternatively set `CELERY_TASK_ALWAYS_EAGER=1` to run tasks inside the web process)
+
+```
+cd backend
+uv run celery --app helios worker --events --beat --concurrency 1
 ```
 
 ## Google Auth Configuration
