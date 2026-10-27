@@ -392,6 +392,7 @@ textarea:focus-visible {
 
 /* autenticacao */
 #mystuff > .panel {
+    width: max-content;
     border: 1px solid var(--ufma-borda);
     border-top: 4px solid var(--ufma-bordo);
     border-radius: 4px;

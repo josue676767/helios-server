@@ -12,6 +12,9 @@ http://dtic.ifsc.edu.br/sistemas/sistema-de-votacao-on-line-helios/
 from django.core.exceptions import ImproperlyConfigured
 
 from django_auth_ldap.backend import LDAPBackend
+from django.core.exceptions import ImproperlyConfigured
+from django_auth_ldap.backend import LDAPBackend
+from django_auth_ldap.config import LDAPSearch
 
 
 class CustomLDAPBackend(LDAPBackend):

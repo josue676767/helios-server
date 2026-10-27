@@ -104,6 +104,6 @@ def check_constraint(constraint, user_info):
 
 
 def can_create_election(user_id, user_info):
-  return True
+  return user_id == 'helios.admin'
 
 urlpatterns = [re_path(r'^ldap/login', ldap_login_view, name=LDAP_LOGIN_URL_NAME)]

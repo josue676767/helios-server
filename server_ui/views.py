@@ -56,13 +56,4 @@ def home(request):
   
 def ajuda(request):
   return render_template(request, "ajuda")
-
-def docs(request):
-  return render_template(request, "docs")
-
-def faq(request):
-  return render_template(request, "faq")
-
-def privacy(request):
-  return render_template(request, "privacy")
     

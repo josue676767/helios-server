@@ -278,7 +278,7 @@ HELIOS_PRIVATE_DEFAULT = False
 # authentication systems enabled
 # AUTH_ENABLED_SYSTEMS = ['password','facebook', 'google', 'yahoo']
 AUTH_ENABLED_SYSTEMS = get_from_env('AUTH_ENABLED_SYSTEMS',
-                                    get_from_env('AUTH_ENABLED_AUTH_SYSTEMS', 'ldap,password,google,facebook')
+                                    get_from_env('AUTH_ENABLED_AUTH_SYSTEMS', 'ldap,password')
                                     ).split(",")
 
 # Add development login in debug mode
@@ -355,10 +355,10 @@ if ROLLBAR_ACCESS_TOKEN:
 
 # ldap
 # see configuration example at https://pythonhosted.org/django-auth-ldap/example.html
-AUTH_LDAP_SERVER_URI = "ldap://ldap.forumsys.com" # replace by your Ldap URI
-AUTH_LDAP_BIND_DN = "cn=read-only-admin,dc=example,dc=com"
-AUTH_LDAP_BIND_PASSWORD = "password"
-AUTH_LDAP_USER_SEARCH = LDAPSearch("dc=example,dc=com",
+AUTH_LDAP_SERVER_URI = "ldap://127.0.0.1" # replace by your Ldap URI
+AUTH_LDAP_BIND_DN = ""
+AUTH_LDAP_BIND_PASSWORD = ""
+AUTH_LDAP_USER_SEARCH = LDAPSearch("ou=users,dc=helios,dc=test",
     ldap.SCOPE_SUBTREE, "(uid=%(user)s)"
 )
 
@@ -370,4 +370,4 @@ AUTH_LDAP_USER_ATTR_MAP = {
 
 AUTH_LDAP_BIND_AS_AUTHENTICATING_USER = True
 
-AUTH_LDAP_ALWAYS_UPDATE_USER = False
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
