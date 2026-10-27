@@ -242,19 +242,65 @@ class Election(HeliosModel):
   def get_featured(cls):
     return cls.objects.filter(featured_p = True).order_by('short_name')
 
-  @classmethod
-  def get_current(cls):
+  def open_to_all_p(self):
     """
-    public elections that are open for voting right now: frozen, not archived,
+    True when anyone can take part: a public election with open registration
+    and no restriction by constraint (group, year, host...). Everything else
+    (private elections, closed voter lists, registration limited by
+    constraints) is restricted to the people it was made for.
+    """
+    if self.private_p or not self.openreg:
+      return False
+
+    for eligibility_case in (self.eligibility or []):
+      if 'constraint' in eligibility_case:
+        return False
+
+    return True
+
+  @classmethod
+  def filter_highlight_visible(cls, elections, user=None, voter=None):
+    """
+    Which of these elections may be highlighted on the front page for this
+    visitor. Elections open to all are visible to everybody; the others only to
+    the people included in them: voters (linked to the logged-in user, or the
+    password voter currently in session) and users who are eligible because of
+    limited registration.
+    """
+    elections = list(elections)
+
+    included_ids = set()
+    if user and elections:
+      included_ids.update(Voter.objects.filter(user=user, election__in=elections)
+                          .values_list('election_id', flat=True))
+    if voter:
+      included_ids.add(voter.election_id)
+
+    def visible(election):
+      if election.open_to_all_p():
+        return True
+      if election.id in included_ids:
+        return True
+      return bool(user) and election.user_eligible_p(user)
+
+    return [e for e in elections if visible(e)]
+
+  @classmethod
+  def get_current(cls, user=None, voter=None):
+    """
+    elections that are open for voting right now: frozen, not archived,
     voting already started and not yet stopped. Used for the front page, so that
     ongoing elections show up without anyone having to mark them as featured.
-    The ones ending first come first.
+    Elections open to all are listed for everybody; private ones, closed voter
+    lists and limited registrations only for the people included in them
+    (see filter_highlight_visible). The ones ending first come first.
     """
     candidates = (cls.objects
-                  .filter(private_p=False, archived_at=None, frozen_at__isnull=False)
+                  .filter(archived_at=None, frozen_at__isnull=False)
                   .select_related('admin')
                   .order_by('voting_ends_at', 'name'))
-    return [e for e in candidates if e.voting_has_started() and not e.voting_has_stopped()]
+    open_now = [e for e in candidates if e.voting_has_started() and not e.voting_has_stopped()]
+    return cls.filter_highlight_visible(open_now, user=user, voter=voter)
 
   @classmethod
   def get_or_create(cls, **kwargs):

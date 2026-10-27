@@ -7,7 +7,7 @@ import copy
 from django.conf import settings
 
 import helios_auth.views as auth_views
-from helios.models import Election
+from helios.models import Election, Voter
 from helios.security import can_create_election
 from helios_auth.security import get_user
 from . import glue
@@ -20,14 +20,25 @@ def get_election():
   return None
   
 def home(request):
-  # elections open for voting right now are always highlighted
-  current_elections = Election.get_current()
-
-  # elections marked as featured, minus the ones already shown above
-  current_ids = set(e.id for e in current_elections)
-  featured_elections = [e for e in Election.get_featured() if e.id not in current_ids]
-
   user = get_user(request)
+
+  # a password voter has no user object, but is identified by the session
+  voter = None
+  voter_id = request.session.get('CURRENT_VOTER_ID')
+  if voter_id:
+    voter = Voter.objects.filter(id=voter_id).first()
+
+  # elections open for voting right now are highlighted, but only for the people
+  # they are meant for: everybody for elections open to all, otherwise just the
+  # voters / eligible users
+  current_elections = Election.get_current(user=user, voter=voter)
+
+  # elections marked as featured, minus the ones already shown above, with the
+  # same visibility rule (a private election never leaks to people not in it)
+  current_ids = set(e.id for e in current_elections)
+  featured_elections = Election.filter_highlight_visible(
+    [e for e in Election.get_featured() if e.id not in current_ids], user=user, voter=voter)
+
   create_p = can_create_election(request)
 
   if create_p:

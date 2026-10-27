@@ -34,7 +34,7 @@
     <h3 id="ufma-andamento-titulo" class="ufma-destaques-titulo">Eleições em andamento</h3>
     {% for election in current_elections %}
     <article class="ufma-destaque">
-      <span class="ufma-destaque-selo">Votação aberta</span>
+      <span class="ufma-destaque-selo">{% if election.open_to_all_p %}Votação aberta{% else %}Você pode votar{% endif %}</span>
       <h4 class="ufma-destaque-nome"><a href="{% url "shortcut@election" election.short_name %}">{{election.name}}</a></h4>
       {% if election.description %}
       <p class="ufma-destaque-descricao">{{election.description_bleached|striptags|truncatewords:30}}</p>

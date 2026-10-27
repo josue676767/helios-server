@@ -3338,3 +3338,101 @@ class VoterDeleteRestrictionTests(WebTest):
         # Check that the delete button is not present
         self.assertNotContains(response, '>x</button></form>]')
 
+
+
+class HomeHighlightTests(TestCase):
+    """
+    The front page highlights elections open for voting right now, but only for
+    the people they are meant for.
+    """
+    fixtures = ['users.json']
+    allow_database_queries = True
+
+    def setUp(self):
+        self.admin = auth_models.User.objects.get(user_id='ben@adida.net', user_type='google')
+        self.included_user = auth_models.User.objects.filter(user_type='facebook')[0]
+        self.other_user = auth_models.User.objects.exclude(
+            pk__in=[self.admin.pk, self.included_user.pk]).first() or self.admin
+
+    def make_election(self, short_name, voting_open=True, **fields):
+        election, _ = models.Election.get_or_create(
+            short_name=short_name, name=short_name, description=short_name, admin=self.admin)
+        now = datetime.datetime.utcnow()
+        election.frozen_at = now - datetime.timedelta(days=2)
+        if voting_open:
+            election.voting_starts_at = now - datetime.timedelta(days=1)
+            election.voting_ends_at = now + datetime.timedelta(days=1)
+        else:
+            election.voting_starts_at = now - datetime.timedelta(days=3)
+            election.voting_ends_at = now - datetime.timedelta(days=1)
+        for key, value in fields.items():
+            setattr(election, key, value)
+        election.save()
+        return election
+
+    def add_voter(self, election, user=None):
+        return models.Voter.objects.create(
+            uuid=str(uuid.uuid4()), election=election, user=user,
+            voter_name='Voter', voter_email='voter@example.com')
+
+    def current(self, user=None, voter=None):
+        return models.Election.get_current(user=user, voter=voter)
+
+    def test_open_to_all_is_visible_to_everybody(self):
+        election = self.make_election('open-to-all', openreg=True, private_p=False)
+        self.assertTrue(election.open_to_all_p())
+        self.assertIn(election, self.current())
+        self.assertIn(election, self.current(user=self.other_user))
+
+    def test_registration_limited_by_constraint_is_not_open_to_all(self):
+        election = self.make_election(
+            'limited', openreg=True,
+            eligibility=[{'auth_system': 'google', 'constraint': [{'domain': 'ufma.br'}]}])
+        self.assertFalse(election.open_to_all_p())
+
+    def test_closed_list_only_for_included_voters(self):
+        election = self.make_election('closed-list', openreg=False, private_p=False)
+        self.add_voter(election, user=self.included_user)
+
+        self.assertFalse(election.open_to_all_p())
+        self.assertNotIn(election, self.current())
+        self.assertNotIn(election, self.current(user=self.other_user))
+        self.assertIn(election, self.current(user=self.included_user))
+
+    def test_private_election_only_for_included_voters(self):
+        election = self.make_election('private', private_p=True, openreg=False)
+        self.add_voter(election, user=self.included_user)
+
+        self.assertNotIn(election, self.current())
+        self.assertNotIn(election, self.current(user=self.other_user))
+        self.assertIn(election, self.current(user=self.included_user))
+
+    def test_password_voter_in_session_is_included(self):
+        election = self.make_election('private-password', private_p=True, openreg=False)
+        voter = self.add_voter(election, user=None)
+
+        self.assertNotIn(election, self.current())
+        self.assertIn(election, self.current(voter=voter))
+
+    def test_voter_of_another_election_does_not_see_it(self):
+        election = self.make_election('private-a', private_p=True, openreg=False)
+        other = self.make_election('private-b', private_p=True, openreg=False)
+        self.add_voter(other, user=self.included_user)
+
+        highlighted = self.current(user=self.included_user)
+        self.assertIn(other, highlighted)
+        self.assertNotIn(election, highlighted)
+
+    def test_finished_election_is_not_current(self):
+        election = self.make_election('finished', voting_open=False, openreg=True)
+        self.assertNotIn(election, self.current())
+
+    def test_featured_private_election_does_not_leak(self):
+        election = self.make_election('featured-private', private_p=True, openreg=False, featured_p=True)
+        self.add_voter(election, user=self.included_user)
+
+        featured = list(models.Election.get_featured())
+        self.assertIn(election, featured)
+        self.assertNotIn(election, models.Election.filter_highlight_visible(featured))
+        self.assertNotIn(election, models.Election.filter_highlight_visible(featured, user=self.other_user))
+        self.assertIn(election, models.Election.filter_highlight_visible(featured, user=self.included_user))
